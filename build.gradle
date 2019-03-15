@@ -1,0 +1,58 @@
+plugins {
+    id 'java'
+    id 'java-library'
+}
+
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'java-library'
+
+    group 'de.dolk'
+    version '1.0-SNAPSHOT'
+}
+
+sourceCompatibility = 1.8
+
+wrapper {
+    gradleVersion = '4.9'
+}
+
+repositories {
+    mavenCentral()
+}
+
+project(':modules:module-a:api') {
+    jar { baseName = 'moduleA-api'}
+}
+project(':modules:module-a:impl') {
+    jar { baseName = 'moduleA-impl'}
+
+    dependencies { api (project(':modules:module-a:api')) }
+}
+project(':modules:module-a:web') {
+    jar { baseName = 'moduleA-web'}
+
+    dependencies { runtime (project(':modules:module-a:impl'))}
+}
+project(':modules:module-b:api') {
+    jar { baseName = 'moduleB-api'}
+}
+project(':modules:module-b:impl') {
+    jar { baseName = 'moduleB-impl'}
+
+    dependencies { api (project(':modules:module-b:api'))}
+}
+project(':modules:module-b:web') {
+    jar { baseName = 'moduleB-web'}
+
+    dependencies { runtime project(':modules:module-b:impl')}
+}
+
+project(':web-app') {
+    apply plugin: 'war'
+
+    dependencies {
+        runtime project(':modules:module-a:web')   // added to WEB-INF/lib
+        runtime project(':modules:module-b:web')   // not added to WEB-INF/lib
+    }
+}

@@ -1,0 +1,10 @@
+include 'web-app'
+include 'modules:module-a:api'
+include 'modules:module-a:impl'
+include 'modules:module-a:web'
+include 'modules:module-b:api'
+include 'modules:module-b:impl'
+include 'modules:module-b:web'
+
+rootProject.name = 'gradle-war-issue'
+
